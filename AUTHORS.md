@@ -1,4 +1,4 @@
-### Team Members:
+## Team Members:
 
 Sarah Alghanim, 442201747
 
@@ -9,5 +9,5 @@ Najla Alhumid, 442201909
 Reem Bayahya, 439202884
 
 
-### Supervisor:
+## Supervisor:
 Dr. Nuha Tayyash
