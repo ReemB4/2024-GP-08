@@ -1,5 +1,4 @@
 ### Team Members:
-Name, ID
 
 Sarah Alghanim, 442201747
 
