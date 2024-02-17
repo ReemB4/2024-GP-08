@@ -1,5 +1,5 @@
 # PDPrognosis
-<img src="/PDPPrognosis.jpeg" width='500'>
+<img src="/PDPrognosis.jpeg" width='100'>
 ## Introduction 
 ## Technology 
 ## Launching instructions 
