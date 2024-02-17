@@ -2,4 +2,10 @@
 <img src="/PDPrognosis.jpeg" width='400'>
 <h1>Introduction</h1> 
 <h1>Technology</h1> 
-<h1>Launching instructions</h1> Launching instructions 
+<ul>
+<li>Digital Ocean hosting services.</li>
+<li>TensorFlow and GPflow are tools for machine learning. </li>
+<li>Anaconda as a tool for managing Python environments.</li>
+<li>Visual Studio Code</li>
+</ul>
+<h1>Launching instructions</h1> 
