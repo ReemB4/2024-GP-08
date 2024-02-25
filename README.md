@@ -12,7 +12,6 @@
 <li>Html</li>
 <li>CSS</li>
 <li>JavaScript</li>
-<li>PHP</li>
 </ul>
 <h1>Launching instructions</h1> 
 <p>TBA</p>
