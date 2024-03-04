@@ -1,5 +1,5 @@
 # PDPrognosis
-<img src="[/PDPrognosis.jpeg](https://github.com/ReemB4/2024-GP-08/blob/7659941b239245bc1cf5a51e9463a40896c91eff/PDPrognosis.jpeg)" width='400'>
+<img src="https://github.com/ReemB4/2024-GP-08/blob/7659941b239245bc1cf5a51e9463a40896c91eff/PDPrognosis.jpeg" width='400'>
 <h1>Introduction</h1> 
 <p>PDPrognosis is a user-friendly platform designed to streamline the management of Parkinson's disease for doctors. It provides time-saving tools and comprehensive insights into patients' protein and peptide profiles, aiding doctors in making informed decisions with ease, and ensuring all relevant information is readily accessible for effective patient care.</p>
 <h1>Technology</h1> 
