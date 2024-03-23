@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>صفحة الطبيب</title>
+</head>
+<body>
+    <h1>مرحبًا بك، {{ doctor['username'] }}</h1>
+    <h2>مريضك المعين:</h2>
+    {% if patient %}
+        <h3>اسم المريض: {{ patient['name'] }}</h3>
+        <p>العمر: {{ patient['age'] }}</p>
+        <p>الجنس: {{ patient['gender'] }}</p>
+        <p>التشخيص: {{ patient['diagnosis'] }}</p>
+    {% else %}
+        <p>لا يوجد مريض معين حاليًا.</p>
+    {% endif %}
+</body>
+</html>
