@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Patient Information</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        
+    </style>
+</head>
+<body>
+    <h1>Patient Information</h1>
+    <p><strong>Name:</strong> {{ patient['name'] }}</p>
+    <p><strong>ID:</strong> {{ patient['id'] }}</p>
+
+    <h2>Proteins</h2>
+    {% for visit_id, proteins_list in proteins.items() %}
+        <h3>Visit ID: {{ visit_id }}</h3>
+        {% for protein in proteins_list %}
+            <p>Name: {{ protein['name'] }}, Score: {{ protein['score'] }}</p>
+        {% endfor %}
+    {% endfor %}
+
+    <h2>Peptides</h2>
+    {% for visit_id, peptides_list in peptides.items() %}
+        <h3>Visit ID: {{ visit_id }}</h3>
+        {% for peptide in peptides_list %}
+            <p>Name: {{ peptide['name'] }}, Score: {{ peptide['score'] }}</p>
+        {% endfor %}
+    {% endfor %}
+</body>
+</html>
