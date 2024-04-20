@@ -60,7 +60,7 @@ def get_peptide_info_by_id(uniprot_id):
         return parse_uniprot_data(response.text)
         
     else:
-        return pd.DataFrame()  # Return an empty on failure
+        return pd.DataFrame()  # Return empty on failure
 
 def get_peptide_info_by_sequence(sequence):
   
@@ -75,7 +75,7 @@ def get_peptide_info_by_sequence(sequence):
     if response.status_code == 200:
         return parse_uniprot_data(response.text)
     else:
-        return pd.DataFrame()  # Return an empty on failure
+        return pd.DataFrame()  # Return empty on failure
 
 # Example:
 uniprot_id = "O00391" 
