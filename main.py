@@ -1,83 +1,79 @@
-from flask import Flask, render_template, request, make_response, redirect, url_for, flash
-import sqlite3
+import requests
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 
 app = Flask(__name__)
-app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
-# Function to establish connection to SQLite database
-def get_db_connection():
-    conn = sqlite3.connect('database.db')
-    conn.row_factory = sqlite3.Row
-    return conn
+def protein_information(protein):
+    lines = protein.strip().split('\n')
+    protein_info = {
+        'ID': '',
+        'Accession': '',
+        'ProteinName': '',
+        'Organism': '',
+        'Function': '',
+        'DiseaseInvolvement': ''
+    }
+    reading_function = False
+    reading_disease = False
 
-# Create table if not exists
-def create_table():
-    conn = get_db_connection()
-    c = conn.cursor()
-    c.execute('''CREATE TABLE IF NOT EXISTS doctors
-                 (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, bod DATE)''')
-    conn.commit()
-    conn.close()
+    for line in lines:
+        if line.startswith("ID   "):
+            protein_info['ID'] = line.split()[1]
+        elif line.startswith("AC   "):
+            protein_info['Accession'] = line.split()[1].rstrip(';')
+        elif 'RecName: Full=' in line:
+            protein_info['ProteinName'] = line.split('Full=')[1].split(';')[0].strip()
+        elif line.startswith("OS   "):
+            protein_info['Organism'] = line.split('OS   ')[1].rstrip('.')
+        elif line.startswith("CC   -!- FUNCTION:"):
+            reading_function = True
+            protein_info['Function'] = line[19:].strip()
+        elif reading_function and line.startswith("CC       "):
+            protein_info['Function'] += ' ' + line.strip()
+        elif not line.startswith("CC       ") and reading_function:
+            reading_function = False
+        elif line.startswith("CC   -!- DISEASE:"):
+            reading_disease = True
+            protein_info['DiseaseInvolvement'] = line[19:].strip()
+        elif reading_disease and line.startswith("CC       "):
+            protein_info['DiseaseInvolvement'] += ' ' + line.strip()
+        elif not line.startswith("CC       ") and reading_disease:
+            reading_disease = False
 
-    
+    return protein_info
 
-# Fetch all doctors from the database
-def get_doctors():
-    conn = get_db_connection()
-    doctors = conn.execute('SELECT * FROM doctors').fetchall()
-    conn.close()
-    return doctors
+def get_variants(uniprot_id):
+    url = f"https://www.ebi.ac.uk/proteins/api/variation/{uniprot_id}?format=json"
+    try:
+        response = requests.get(url, headers={"Accept": "application/json"})
+        response.raise_for_status()  # This will handle HTTP errors
+        return response.json().get('features', [])
+    except requests.RequestException as e:
+        app.logger.error(f"Error fetching variant data: {str(e)}")
+        return []
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('dashboard.html')
-
-@app.route('/doctors')
-def doctors():
-    doctors = get_doctors()
-    return render_template('doctors.html', doctors=doctors)
-
-@app.route('/create_doctor',  methods=['GET', 'POST'])
-def create_doctor():
     if request.method == 'POST':
-        name = request.form['name']
-        email = request.form['email']
-        bod = request.form['bod']
+        uniprot_id = request.form.get('uniprot_id')
+        if uniprot_id:
+            return redirect(url_for('protein_info_page', uniprot_id=uniprot_id))
+    return render_template('index.html')
 
-        conn = get_db_connection()
-        create_table()
+@app.route('/protein/<uniprot_id>', methods=['GET'])
+def protein_info_page(uniprot_id):
+    try:
+        url = f"https://www.uniprot.org/uniprot/{uniprot_id}.txt"
+        response = requests.get(url)
+        response.raise_for_status()
+        protein_info = protein_information(response.text)
+        
+        # Check if the disease involvement directly indicates Parkinson's disease
+        protein_info['IsParkinsonRelated'] = 'Parkinson' in protein_info['DiseaseInvolvement']
 
-        # Insert form data into the database
-        conn.execute("INSERT INTO doctors (name, email, bod) VALUES (?, ?, ?)", (name, email, bod))
-
-        # Commit the transaction
-        conn.commit()
-        conn.close()
-
-        flash('Doctor has been created successfully!', 'success')
-
-        response = make_response(f"Received data: Name - {name}, Email - {email}, Birth of Date - {bod}", 201)
-        return redirect(url_for('doctors'))
-    else:
-        return render_template('create_doctor.html')
-
-@app.route('/remove_doctor', methods=['POST'])
-def remove_doctor():
-    doctor_id = request.form['doctor_id']
-    
-    # Connect to the SQLite database
-    conn = get_db_connection()
-
-    # Execute SQL DELETE statement to remove the record
-    conn.execute("DELETE FROM doctors WHERE id = ?", (doctor_id,))
-
-    # Commit the transaction
-    conn.commit()
-    conn.close()
-
-    flash('Doctor has been removed successfully!', 'success')
-
-    return redirect(url_for('doctors'))  # Redirect to the doctors page after removal
+        return render_template('protein_info.html', protein_info=protein_info)
+    except requests.HTTPError as e:
+        return render_template('error.html', error=f"HTTP Error {e.response.status_code}: {e.response.reason}")
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=5000)
+    app.run(debug=True)
