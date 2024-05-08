@@ -3,8 +3,8 @@ from flask import Flask, render_template, request, redirect, url_for, jsonify
 
 app = Flask(__name__)
 
-def peptide_information(peptide):
-    lines = peptide.strip().split('\n')
+def peptide_information(response):
+    lines = response.strip().split('\n')
     peptide_info = {
         'Entry': '',
         'Entry_name': '',
