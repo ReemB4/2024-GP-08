@@ -31,7 +31,7 @@ def peptide_information(response):
         elif line.startswith("OS   "):
             peptide_info['Organism'] = line.split('OS   ')[1].rstrip('.')
         elif line.startswith("GN   Name="):
-            peptide_info['Gene'] = line.split('Name=')[1].split(';')[0].strip()+ ", CALL"
+            peptide_info['Gene'] = line.split('Name=')[1].split(';')[0].strip()
         elif line.startswith("CC   -!- FUNCTION:"):
             reading_function = True
             peptide_info['Function'] = line[19:].strip()
