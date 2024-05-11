@@ -1,0 +1,191 @@
+{% extends 'hospital/doctor_base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+
+<head>
+  <style>
+    table, th, td {
+      margin-left: auto;
+      margin-right: auto;
+      border: 1px solid black;
+      border-collapse: collapse;
+    }
+    </style>
+
+  <style media="screen">
+    a:link {
+      text-decoration: none;
+    }
+
+    .note {
+      text-align: center;
+      height: 80px;
+      background: -webkit-linear-gradient(left, #0072ff, #8811c5);
+      color: #fff;
+      font-weight: bold;
+      line-height: 80px;
+    }
+
+    .form-content {
+      padding: 5%;
+      border: 1px solid #ced4da;
+      margin-bottom: 2%;
+    }
+
+    .form-control {
+      border-radius: 1.5rem;
+    }
+
+    .btnSubmit {
+      border: none;
+      border-radius: 1.5rem;
+      padding: 1%;
+      width: 20%;
+      cursor: pointer;
+      background: #0062cc;
+      color: #fff;
+    }
+
+    .menu {
+      top: 50px;
+    }
+  </style>
+
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<br><br>
+<!------ update page for doctor by admin ---------->
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div class="container register-form">
+    <div class="form">
+      <div class="note">
+        <p>Visits Patient Details</p>
+      </div>
+    
+              {% comment %} {% render_field userForm.first_name class="form-control" placeholder="First Name" %} {% endcomment %}
+            </div>
+           <br>
+                <h2>User Nmae: {{userForm.username}}</h2>
+                <h5>Visit Date: 3 March (Proteins)</h5>
+                <table >
+                  <tr>
+                    <th>Name</th>
+                    
+                    <th>Abundance</th>
+                  </tr>
+                  
+                  <tr>
+                    <td>O00391</td>
+                    <td>11254.3</td>
+                  </tr>
+
+                  <tr>
+                    <td>P01717</td>
+                    <td>110750</td>
+                  </tr>
+                  <tr>
+                    <td>P01024</td>
+                    <td>3916980</td>
+                  </tr>
+                  <tr>
+                    <td>P01024</td>
+                    <td>3916980</td>
+                  </tr>
+
+                  <tr>
+                    <td>P00747</td>
+                    <td>43235500</td>
+                  </tr>
+                  <tr>          
+                    <td>P01033</td>
+                    <td>732430</td>
+                  </tr>
+                  <tr>
+                    <td>P00450</td>
+                    <td>39585.8</td>
+                  </tr>
+                  <tr>
+                    <td>O60888</td>
+                    <td>1829650</td>
+                  </tr>
+                  <tr>
+                    <td>O00533</td>
+                    <td>24917</td>
+                  </tr>
+                  <tr>
+                    <td>O00584</td>
+                    <td>1613890</td>
+                  </tr>
+                  <tr>
+                    <td>P01019</td>
+                    <td>396955</td>
+                  </tr>
+                </table>
+                <h5>Visit Date: 11 May (Proteins)</h5>
+                <table >
+                  <tr>
+                    <th>Name</th>
+                    
+                    <th>Abundance</th>
+                  </tr>
+                  
+                  <tr>
+                    <td>P01019</td>
+                    <td>396955</td>
+                  </tr>
+
+                  <tr>
+                    <td>O00391</td>
+                    <td>11254.3</td>
+                  </tr>
+                  <tr>
+                    <td>P01717</td>
+                    <td>110750</td>
+                  </tr>
+                  <tr>
+                    <td>P01024</td>
+                    <td>3916980</td>
+                  </tr>
+
+                  <tr>
+                    <td>P00747</td>
+                    <td>43235500</td>
+                  </tr>
+                  <tr>
+                    <td>P01033</td>
+                    <td>732430</td>
+                  </tr>
+                  <tr>
+                    <td>P00450</td>
+                    <td>39585.8</td>
+                  </tr>
+                  <tr>
+                    <td>O60888</td>
+                    <td>1829650</td>
+                  </tr>
+                  <tr>
+                    <td>O00533</td>
+                    <td>24917</td>
+                  </tr>
+                  <tr>
+                    <td>O00584</td>
+                    <td>1613890</td>
+                  </tr>
+                  <tr>
+                    <td>P01019</td>
+                    <td>396955</td>
+                  </tr>
+                </table>
+            
+           
+        <button type="submit" class="btnSubmit">upload file</button>
+      </div>
+    </div>
+  </div>
+</form>
+
+
+{% endblock content %}
