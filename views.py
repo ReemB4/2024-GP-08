@@ -37,6 +37,73 @@ def patientclick_view(request):
     return render(request,'hospital/patientclick.html')
 
 
+# def index(request):
+#     return render(request,'hospital/index.html')
+# Create your views here.
+def protein_info_view(request):
+    if request.method == 'POST':
+        uniprot_id = request.POST.get('uniprot_id')
+        if uniprot_id:
+            # Fetch protein information from the API
+            protein_info = get_protein_info(uniprot_id)
+            if protein_info:
+                print(protein_info)
+                return render(request, 'hospital/protein_info.html', {'protein_info': protein_info})
+            else:
+                return render(request, 'hospital/protein_info.html', {'error': 'Error fetching protein information from API'})
+    return render(request, 'hospital/index.html')
+
+def get_protein_info(uniprot_id):
+    url = f"https://www.uniprot.org/uniprot/{uniprot_id}.txt"
+    print(requests.get(url))
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        protein_info = protein_information(response.text)
+        protein_info['uniprot_id'] = uniprot_id
+        return protein_info
+    except requests.RequestException as e:
+        return None
+
+def protein_information(protein):
+    lines = protein.strip().split('\n')
+    print(lines)
+    protein_info = {
+        'ID': '',
+        'Accession': '',
+        'ProteinName': '',
+        'Organism': '',
+        'Function': '',
+        'DiseaseInvolvement': ''
+    }
+    reading_function = False
+    reading_disease = False
+
+    for line in lines:
+        if line.startswith("ID   "):
+            protein_info['ID'] = line.split()[1]
+        elif line.startswith("AC   "):
+            protein_info['Accession'] = line.split()[1].rstrip(';')
+        elif 'RecName: Full=' in line:
+            protein_info['ProteinName'] = line.split('Full=')[1].split(';')[0].strip()
+        elif line.startswith("OS   "):
+            protein_info['Organism'] = line.split('OS   ')[1].rstrip('.')
+        elif line.startswith("CC   -!- FUNCTION:"):
+            reading_function = True
+            protein_info['Function'] = line[19:].strip()
+        elif reading_function and line.startswith("CC       "):
+            protein_info['Function'] += ' ' + line.strip()
+        elif not line.startswith("CC       ") and reading_function:
+            reading_function = False
+        elif line.startswith("CC   -!- DISEASE:"):
+            reading_disease = True
+            protein_info['DiseaseInvolvement'] = line[19:].strip()
+        elif reading_disease and line.startswith("CC       "):
+            protein_info['DiseaseInvolvement'] += ' ' + line.strip()
+        elif not line.startswith("CC       ") and reading_disease:
+            reading_disease = False
+
+    return protein_info
 
 
 def admin_signup_view(request):
