@@ -4,19 +4,26 @@
 
 <head>
   <style>
-    table, th, td {
-      margin-left: auto;
-      margin-right: auto;
-      border: 1px solid black;
-      border-collapse: collapse;
-    }
-    </style>
 
-  <style media="screen">
-    a:link {
-      text-decoration: none;
-    }
+table {
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid black;
+  border-collapse: collapse;
+  max-height: 300px; /* تعيين الارتفاع الأقصى للجدول */
+  overflow-y: scroll; /* تمكين التمرير الرأسي */
+ 
+}
 
+  th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: center;
+  }
+  tr:hover {
+        background-color: #f5f5f5;
+    }
     .note {
       text-align: center;
       height: 80px;
@@ -25,17 +32,14 @@
       font-weight: bold;
       line-height: 80px;
     }
-
     .form-content {
       padding: 5%;
       border: 1px solid #ced4da;
       margin-bottom: 2%;
     }
-
     .form-control {
       border-radius: 1.5rem;
     }
-
     .btnSubmit {
       border: none;
       border-radius: 1.5rem;
@@ -45,50 +49,241 @@
       background: #0062cc;
       color: #fff;
     }
-
     .menu {
       top: 50px;
     }
+    .username {
+  font-size: 24px;
+  border: 1px solid green;
+  background-color: lightgreen;
+  padding: 10px;
+  text-align: center;
+}
+
+.visit-date {
+  font-size: 12px;
+  font-weight: normal;
+  text-align: center;
+  background-color: #f5f5f5;
+  padding: 10px;
+}
+
+.search-button {
+  background-color: #0062cc;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.visit-date-label {
+  display: block;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.visit-date-select {
+  border-radius: 5px;
+  padding: 5px;
+  width: 200px;
+  font-size: 14px;
+}
   </style>
 
   <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
   <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
+
 <br><br>
+
+<script>
+  function scrollTable(tableId, direction) {
+    var table = document.getElementById(tableId);
+    if (direction === "up") {
+      table.scrollTop -= 50; // Scroll table up
+    } else if (direction === "down") {
+      table.scrollTop += 50; // Scroll table down
+    }
+  }
+</script>
 <!------ update page for doctor by admin ---------->
-<form method="post" enctype="multipart/form-data">
+
+<form method="post" action="{% url 'protein-info' %}" enctype="multipart/form-data">
   {% csrf_token %}
   <div class="container register-form">
     <div class="form">
       <div class="note">
-        <p>Visits Patient Details</p>
+        <p>Visits Patient Details </p>
       </div>
-    
-              {% comment %} {% render_field userForm.first_name class="form-control" placeholder="First Name" %} {% endcomment %}
+
+      {% comment %} {% render_field userForm.first_name class="form-control" placeholder="First Name" %} {% endcomment %}
             </div>
+             <!-- Render userForm fields -->
+      <br>
+    <div style="padding: 32px;
+    margin: auto;
+    width: 50%;
+    display: flex;
+    border-radius: 10px;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    box-shadow: 0px 0px 6px #9d9999;">
+     {{userForm.username}}
+      <label for="visit-date">Select Visit Date:</label>
+      <select id="visit-date" name="visit-date">
+        <option value="2024-05-01">1 May 2024</option>
+        <option value="2024-05-02">2 May 2024</option>
+        <option value="2024-05-03">3 May 2024</option>
+      </select>
+    </div>
+      <br>
+
+
+   <div style="padding: 32px;
+    margin: auto;
+    width: 100%;
+    display: flex;
+    border-radius: 10px;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    box-shadow: 0px 0px 6px #9d9999;">
+     <h3 class="text-center">Search Protein Peptide</h3>
+
+
+     <form action="{% url 'protein-info' %}" method="post">
+       <label for="uniprot_id">ID:</label>
+       <input class="form-control" type="text" id="uniprot_id" name="uniprot_id" required>
+
+       <label for="idType">Type:</label>
+       <select class="form-control" name="idType">
+         <option value="protein">Protein</option>
+         <option value="peptide">Peptide</option>
+       </select>
+
+       <button class="btn btn-primary mt-3" type="submit">Submit</button>
+     </form>
+
+       <table class="table table-striped">
+           <tr>
+               <td><strong>ID:</strong></td>
+               <td>{{ protein_info.ID }}</td>
+           </tr>
+           <tr>
+               <td><strong>Accession:</strong></td>
+               <td>{{ protein_info.Accession }}</td>
+           </tr>
+           <tr>
+               <td><strong>Protein Name:</strong></td>
+               <td>{{ protein_info.ProteinName }}</td>
+           </tr>
+           <tr>
+               <td><strong>Organism:</strong></td>
+               <td>{{ protein_info.Organism }}</td>
+           </tr>
+           <tr>
+               <td><strong>Function:</strong></td>
+               <td>{{ protein_info.Function }}</td>
+           </tr>
+           <tr>
+               <td><strong>Disease Involvement:</strong></td>
+               <td>{{ protein_info.DiseaseInvolvement }}</td>
+           </tr>
+       </table>
+
+   </div>
            <br>
-                <h2>User Nmae: {{userForm.username}}</h2>
-                <h5>Visit Date: 3 March (Proteins)</h5>
-                <table >
+           <h5>Proteins</h5>
+           <br>
+
+                <table  class="table table-striped text-center w-75">
+                 <thead>
+                 <tr>
+                   <th>Name</th>
+                   <th>Abundance</th>
+
+                 </tr>
+                 </thead>
+
+              <tbody>
+              <tr>
+                <td>O00391</td>
+                <td>11254.3</td>
+
+              </tr>
+
+              <tr>
+                <td>P01717</td>
+                <td>110750</td>
+
+              </tr>
+              <tr>
+                <td>P01024</td>
+                <td>3916980</td>
+
+              </tr>
+              <tr>
+                <td>P01024</td>
+                <td>3916980</td>
+              </tr>
+
+              <tr>
+                <td>P00747</td>
+                <td>43235500</td>
+              </tr>
+              <tr>
+                <td>P01033</td>
+                <td>732430</td>
+              </tr>
+              <tr>
+                <td>P00450</td>
+                <td>39585.8</td>
+              </tr>
+              <tr>
+                <td>O60888</td>
+                <td>1829650</td>
+              </tr>
+              <tr>
+                <td>O00533</td>
+                <td>24917</td>
+              </tr>
+              <tr>
+                <td>O00584</td>
+                <td>1613890</td>
+              </tr>
+              <tr>
+                <td>P01019</td>
+                <td>396955</td>
+              </tr>
+              </tbody>
+                </table>
+                <h5>Peptides</h5>
+              <table  class="table table-striped text-center w-75">
                   <tr>
                     <th>Name</th>
-                    
+
                     <th>Abundance</th>
                   </tr>
-                  
+
+                  <tr>
+                    <td>P01019</td>
+                    <td>396955</td>
+                  </tr>
+
                   <tr>
                     <td>O00391</td>
                     <td>11254.3</td>
                   </tr>
-
                   <tr>
                     <td>P01717</td>
                     <td>110750</td>
-                  </tr>
-                  <tr>
-                    <td>P01024</td>
-                    <td>3916980</td>
                   </tr>
                   <tr>
                     <td>P01024</td>
@@ -99,7 +294,7 @@
                     <td>P00747</td>
                     <td>43235500</td>
                   </tr>
-                  <tr>          
+                  <tr>
                     <td>P01033</td>
                     <td>732430</td>
                   </tr>
@@ -124,64 +319,7 @@
                     <td>396955</td>
                   </tr>
                 </table>
-                <h5>Visit Date: 11 May (Proteins)</h5>
-                <table >
-                  <tr>
-                    <th>Name</th>
-                    
-                    <th>Abundance</th>
-                  </tr>
-                  
-                  <tr>
-                    <td>P01019</td>
-                    <td>396955</td>
-                  </tr>
-
-                  <tr>
-                    <td>O00391</td>
-                    <td>11254.3</td>
-                  </tr>
-                  <tr>
-                    <td>P01717</td>
-                    <td>110750</td>
-                  </tr>
-                  <tr>
-                    <td>P01024</td>
-                    <td>3916980</td>
-                  </tr>
-
-                  <tr>
-                    <td>P00747</td>
-                    <td>43235500</td>
-                  </tr>
-                  <tr>
-                    <td>P01033</td>
-                    <td>732430</td>
-                  </tr>
-                  <tr>
-                    <td>P00450</td>
-                    <td>39585.8</td>
-                  </tr>
-                  <tr>
-                    <td>O60888</td>
-                    <td>1829650</td>
-                  </tr>
-                  <tr>
-                    <td>O00533</td>
-                    <td>24917</td>
-                  </tr>
-                  <tr>
-                    <td>O00584</td>
-                    <td>1613890</td>
-                  </tr>
-                  <tr>
-                    <td>P01019</td>
-                    <td>396955</td>
-                  </tr>
-                </table>
-            
-           
-        <button type="submit" class="btnSubmit">upload file</button>
+              
       </div>
     </div>
   </div>
