@@ -1,9 +1,9 @@
 # PDPrognosis
 
 <img src="/PDPrognosis.jpeg" width='400'>
-<h1>Introduction</h1>
+<h2>Introduction</h1>
 <p>PDPrognosis is a graduation project that offers a user-friendly platform designed to streamline the management of Parkinson's disease for doctors. It provides time-saving tools and comprehensive insights into patients' protein and peptide profiles, aiding doctors in making informed decisions with ease, and ensures all relevant information is readily accessible for effective patient care.</p>
-<h1>Technology</h1> 
+<h2>Technology</h1> 
 <ul>
 <li>Digital Ocean hosting services.</li>
 <li>TensorFlow and GPflow are tools for machine learning. </li>
@@ -14,5 +14,5 @@
 <li>CSS</li>
 <li>JavaScript</li>
 </ul>
-<h1>Launching instructions</h1> 
+<h2>Launching instructions</h1> 
 <p>TBA</p>
